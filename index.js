@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 app.use(express.json())
 
 /**step 2 */
@@ -40,23 +40,23 @@ app.get('/search',(req, res) => {
     { title: 'Brazil', year: 1985, rating: 8 },
     { title: 'الإرهاب والكباب‎', year: 1992, rating: 6.2 }
 ]
-app.get('/movies/create', (req, res) => {
-    res.send({status:200, message:"ok"})
+// app.get('/movies/create', (req, res) => {
+//     res.send({status:200, message:"ok"})
  
-})
+// })
    
 app.get("/movies/read", (req, res) => {
-res.send({status: 200,data: movies})
+ res.send({status: 200,data: movies,})
 })
 
-app.get('/movies/update', (req, res) => {
-    res.send({status:200, message:"ok"})
+// app.get('/movies/update', (req, res) => {
+//     res.send({status:200, message:"ok"})
  
-})
-app.get('/movies/delete', (req, res) => {
-    res.send({status:200, message:"ok"})
+// })
+// app.get('/movies/delete', (req, res) => {
+//     res.send({status:200, message:"ok"})
  
-})
+// })
 
 /**step6 */
 app.get("/movies/read/by-date", (req, res) =>
@@ -96,7 +96,7 @@ app.get("/movies/read/id/:id", (req, res) => {
 });
 /**step8 */
 
-app.get("/movies/add", (req, res) => {
+app.post("/movies/add", (req, res) => {
     const title = req.query.title;
     const year = req.query.year;
     const rating = req.query.rating;
@@ -111,16 +111,15 @@ app.get("/movies/add", (req, res) => {
       movies.push({title: title,year: year,rating: length,});
       res.send(movies);
     } 
-    else 
-    {
-      movies.push({title: title,year: year,rating: rating });
-      res.send({status: 200,data: movies});
-    }
+    
+    movies.push({title: title,year: year,rating: rating });
+    res.send({status: 200,data: movies});
+    
 });
 
 /**step 9 */
-app.get("/movies/delete/:id", (req, res) => {
-    let filmId = req.params.id;
+app.delete("/movies/delete/:id", (req, res) => {
+    const filmId = req.params.id;
     if (filmId >= movies.length || filmId < 0) 
     {
       res.send({status: 404,error: true,message: `the movie id ${filmId} does not exist `});
@@ -134,7 +133,7 @@ app.get("/movies/delete/:id", (req, res) => {
   });
 
   /**step 10 */
-  app.get("/movies/update/:id", (req, res) => {
+  app.put("/movies/update/:id", (req, res) => {
     var movieID = req.params.id;
     var movieTitle = req.query.title;
     var movieYear = req.query.year;
@@ -156,8 +155,7 @@ app.get("/movies/delete/:id", (req, res) => {
     }
   
     res.send(movies);
-  });
-
+});
 app.listen(port, () => console.log(`the server started at http://localhost:${port}`))
 
 
