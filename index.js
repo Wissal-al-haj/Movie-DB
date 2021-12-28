@@ -2,12 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 app.use(express.json())
-const movies = [
-    { title: 'Jaws', year: 1975, rating: 8 },
-    { title: 'Avatar', year: 2009, rating: 7.8 },
-    { title: 'Brazil', year: 1985, rating: 8 },
-    { title: 'الإرهاب والكباب‎', year: 1992, rating: 6.2 }
-]
+
 /**step 2 */
 app.get('/', (req, res) => {
     res.send('ok')
@@ -39,6 +34,12 @@ app.get('/search',(req, res) => {
  })
 
  /**step 5 */
+ const movies = [
+    { title: 'Jaws', year: 1975, rating: 8 },
+    { title: 'Avatar', year: 2009, rating: 7.8 },
+    { title: 'Brazil', year: 1985, rating: 8 },
+    { title: 'الإرهاب والكباب‎', year: 1992, rating: 6.2 }
+]
 app.get('/movies/create', (req, res) => {
     res.send({status:200, message:"ok"})
  
@@ -93,6 +94,30 @@ app.get("/movies/read/id/:id", (req, res) => {
       res.send({ status: 404, error: true,message: `The Movie ${id} dpes not exists`});
     }
 });
+/**step8 */
+
+app.get("/movies/add", (req, res) => {
+    const title = req.query.title;
+    const year = req.query.year;
+    const rating = req.query.rating;
+  
+    if ( title == null || isNaN(year) || typeof year === "undefined" || year.toString().length != 4) 
+    {
+      res.send({status: 403,error: true,message: "you cannot create a movie without title and a year"});
+    } 
+    else if (rating == "" || typeof rating === "undefined") 
+    {
+      var lenght = 4;
+      movies.push({title: title,year: year,rating: length,});
+      res.send(movies);
+    } 
+    else 
+    {
+      movies.push({title: title,year: year,rating: rating });
+      res.send({status: 200,data: movies});
+    }
+});
+
 app.listen(port, () => console.log(`the server started at http://localhost:${port}`))
 
 
