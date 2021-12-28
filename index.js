@@ -133,6 +133,31 @@ app.get("/movies/delete/:id", (req, res) => {
     }
   });
 
+  /**step 10 */
+  app.get("/movies/update/:id", (req, res) => {
+    var movieID = req.params.id;
+    var movieTitle = req.query.title;
+    var movieYear = req.query.year;
+    var movieRating = req.query.rating;
+    if (movieID < 0 || movieID >= movies.length) {
+      res.send("Invalid Movie id");
+    }
+  
+    if (movieTitle != null) {
+      movies[movieID].title = movieTitle;
+    }
+  
+    if (movieYear != null) {
+      movies[movieID].year = movieYear;
+    }
+  
+    if (movieRating != null) {
+      movies[movieID].rating = movieRating;
+    }
+  
+    res.send(movies);
+  });
+
 app.listen(port, () => console.log(`the server started at http://localhost:${port}`))
 
 
