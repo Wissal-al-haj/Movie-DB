@@ -57,6 +57,30 @@ app.get('/movies/delete', (req, res) => {
  
 })
 
+/**step6 */
+app.get("/movies/read/by-date", (req, res) =>
+  res.send({
+    data: movies.sort((f, s) => {
+      return f.year - s.year;
+    }),
+  })
+);
+
+app.get("/movies/read/by-rating", (req, res) =>
+  res.send({
+    data: movies.sort((f, s) => {
+      return s.rating - f.rating;
+    }),
+  })
+);
+
+app.get("/movies/read/by-title", (req, res) =>
+  res.send({
+    data: movies.sort((f, s) => {
+      return f.title.localeCompare(s.title);
+    }),
+  })
+);
 app.listen(port, () => console.log(`the server started at http://localhost:${port}`))
 
 
