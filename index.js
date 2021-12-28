@@ -81,6 +81,18 @@ app.get("/movies/read/by-title", (req, res) =>
     }),
   })
 );
+/**step7 */
+app.get("/movies/read/id/:id", (req, res) => {
+    var id = req.params.id;
+    if (id <= movies.length && id > 0) 
+    {
+    res.send({status: 200,data: movies[id - 1]});
+    }
+    else 
+    {
+      res.send({ status: 404, error: true,message: `The Movie ${id} dpes not exists`});
+    }
+});
 app.listen(port, () => console.log(`the server started at http://localhost:${port}`))
 
 
