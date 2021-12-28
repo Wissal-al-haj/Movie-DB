@@ -118,6 +118,21 @@ app.get("/movies/add", (req, res) => {
     }
 });
 
+/**step 9 */
+app.get("/movies/delete/:id", (req, res) => {
+    let filmId = req.params.id;
+    if (filmId >= movies.length || filmId < 0) 
+    {
+      res.send({status: 404,error: true,message: `the movie id ${filmId} does not exist `});
+    }
+    else 
+    {
+      let films = movies;
+      films.splice(filmId, 1);
+      res.send(films);
+    }
+  });
+
 app.listen(port, () => console.log(`the server started at http://localhost:${port}`))
 
 
