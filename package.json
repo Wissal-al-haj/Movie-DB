@@ -1,22 +1,28 @@
-{  "name": "notable",  
+{  
+  "name": "movie-db",  
   "version": "1.0.0",  
-  "description": "",  
-  "main": "server.js",  
-  "scripts": {    "dev": "nodemon server.js"  }, 
-
+  "description": "or CMDB for short", 
+  "main": "index.js",  
+  "scripts": {    
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+    },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wissal-al-haj/Movie-DB.git"
+    "url": "git+https://github.com/wissal-al-haj/Movie-DB.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Wissal-al-haj/Movie-DB/issues"
+    "url": "https://github.com/wissal-al-haj/Movie-DB/issues"
   },
-  "homepage": "https://github.com/Wissal-al-haj/Movie-DB#readme",
-  "dependencies": {   
+  "homepage": "https://github.com/wissal-al-haj/Movie-DB#readme",
+  "dependencies": {    
     "body-parser": "^1.15.2",    
-    "express": "^4.14.0",    
-    "mongodb": "^2.2.16"  },  
-   "devDependencies": {    "nodemon": "^1.11.0"  }
+    "express": "^4.17.2",
+    "mongoose": "^6.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
 }

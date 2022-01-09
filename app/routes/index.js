@@ -1,12 +1,19 @@
-const express = require('express')
-const app = express()
-const port = process.env.PORT || 3000
-app.use(express.json())
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const app = express();
+app.use(cors());
+
 
 /**step 2 */
-app.get('/', (req, res) => {
-    res.send('ok')
- 
+app.get("/", async (req, res) => {
+  try {
+    const moviesDetails = await Movies.find({});
+    res.send(moviesDetails);
+  } catch (err) {
+    console.log("~ err", err);
+  }
 })
 
 /**step 3 */
@@ -34,20 +41,20 @@ app.get('/search',(req, res) => {
  })
 
  /**step 5 */
- const movies = [
-    { title: 'Jaws', year: 1975, rating: 8 },
-    { title: 'Avatar', year: 2009, rating: 7.8 },
-    { title: 'Brazil', year: 1985, rating: 8 },
-    { title: 'الإرهاب والكباب‎', year: 1992, rating: 6.2 }
-]
+//  const movies = [
+//     { title: 'Jaws', year: 1975, rating: 8 },
+//     { title: 'Avatar', year: 2009, rating: 7.8 },
+//     { title: 'Brazil', year: 1985, rating: 8 },
+//     { title: 'الإرهاب والكباب‎', year: 1992, rating: 6.2 }
+// ]
 // app.get('/movies/create', (req, res) => {
 //     res.send({status:200, message:"ok"})
  
 // })
    
-app.get("/movies/read", (req, res) => {
- res.send({status: 200,data: movies,})
-})
+// app.get("/movies/read", (req, res) => {
+//  res.send({status: 200,data: movies,})
+// })
 
 // app.get('/movies/update', (req, res) => {
 //     res.send({status:200, message:"ok"})
@@ -94,28 +101,32 @@ app.get("/movies/read/id/:id", (req, res) => {
       res.send({ status: 404, error: true,message: `The Movie ${id} dpes not exists`});
     }
 });
+
 /**step8 */
 
 app.post("/movies/add", (req, res) => {
-    const title = req.query.title;
-    const year = req.query.year;
-    const rating = req.query.rating;
+  let rq=req.query;
+  let year=parseInt(rq.year);
   
-    if ( title == null || isNaN(year) || typeof year === "undefined" || year.toString().length != 4) 
+    if ( rq.title == null || isNaN(rq.year) || typeof rq.year === "undefined" || rq.year.toString().length != 4) 
     {
       res.send({status: 403,error: true,message: "you cannot create a movie without title and a year"});
-    } 
-    else if (rating == "" || typeof rating === "undefined") 
-    {
-      var lenght = 4;
-      movies.push({title: title,year: year,rating: length,});
-      res.send(movies);
-    } 
     
-    movies.push({title: title,year: year,rating: rating });
-    res.send({status: 200,data: movies});
+      if (rq.rating == "" || typeof rq.rating === "undefined") 
+    {
+      var length = 4;
+      obj=[rq.title,rq.year,length]
+    } 
+     
+   movies.push(obj)
+   res.send({movies})
+  }
+    // movies.push({title: title,year: year,rating: rating });
+    // res.send({status: 200,data: movies});
     
 });
+
+
 
 /**step 9 */
 app.delete("/movies/delete/:id", (req, res) => {
@@ -124,20 +135,21 @@ app.delete("/movies/delete/:id", (req, res) => {
     {
       res.send({status: 404,error: true,message: `the movie id ${filmId} does not exist `});
     }
-    else 
-    {
-      let films = movies;
-      films.splice(filmId, 1);
-      res.send(films);
-    }
+    
+      obj_i=parseInt(filmId-1)
+      console.log(obj_i)
+      movies.splice(obj_i,1)
+      res.send({movies})
+    
   });
-
-  /**step 10 */
+ 
+/**step 10 */
   app.put("/movies/update/:id", (req, res) => {
-    var movieID = req.params.id;
+    var movieID =parseInt(req.params.id-1);
     var movieTitle = req.query.title;
     var movieYear = req.query.year;
     var movieRating = req.query.rating;
+
     if (movieID < 0 || movieID >= movies.length) {
       res.send("Invalid Movie id");
     }
@@ -154,8 +166,47 @@ app.delete("/movies/delete/:id", (req, res) => {
       movies[movieID].rating = movieRating;
     }
   
-    res.send(movies);
+    res.send({data:movies});
 });
+
+
+//step 12
+const express = require('express')
+const app = express()
+const port = 3000
+const mongoose = require('mongoose')
+const uri ="mongodb+srv://client:client@cluster0.c9ert.mongodb.net/MovieDB?retryWrites=true&w=majority";
+
+mongoose.connect(uri,{ useNewUrlParser: true, useUnifiedTopology: true })
+.then(
+    console.log('we are connected to the database ')
+)
+.catch(error=>{
+    console.log('it did not work')
+    }
+)
+const movies = [
+    {title: 'Jaws', year: 1975, rating: 8 },
+    {title: 'Avatar', year: 2009, rating: 7.8 },
+    {title: 'Brazil', year: 1985, rating: 8 },
+    {title: 'الإرهاب والكباب', year: 1992, rating: 6.2 }
+]
+const db = mongoose.connection
+  const moviesSchema = mongoose.Schema({
+    title: {
+      type: String,
+      required: true,
+    },
+    year: {
+      type: Number,
+      required: true,
+
+    },
+    rating: {
+      type: Number,
+      required: true,
+    }
+  },
+  {  versionKey:false  });
+  const Movies = mongoose.model('Movie', moviesSchema);
 app.listen(port, () => console.log(`the server started at http://localhost:${port}`))
-
-
